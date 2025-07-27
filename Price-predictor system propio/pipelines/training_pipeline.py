@@ -4,7 +4,7 @@ from steps.feature_engineering_step import feature_engineering_step
 from steps.handle_missing_values_step import handle_missing_values_step
 #from steps.model_building_step import model_building_step
 #from steps.model_evaluator_step import model_evaluator_step
-#from steps.outlier_detection_step import outlier_detection_step
+from steps.outlier_detection_step import outlier_detection_step
 from zenml import Model, pipeline, step
 
 @pipeline(
@@ -28,7 +28,9 @@ def ml_pipeline():
        'VENTA_ZONA_115', 'VENTA_ZONA_116', 'VENTA_ZONA_119','TALLA','NOMB_SUBGRUPO','CAMPANA']]
     )
 
-
+    # Outlier Detection Step
+    clean_data = outlier_detection_step(engineered_data)
+                                        
 if __name__ == "__main__":
     # Running the pipeline
     run = ml_pipeline()
