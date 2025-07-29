@@ -55,6 +55,9 @@ class OutlierDetector:
     def set_strategy(self, strategy :OutlierDetectionStrategy):
         logging.info("Switching outlier detection strategy.")
         self._strategy = strategy
+    def detect_outliers(self, df: pd.DataFrame) -> pd.DataFrame:
+        logging.info("Executing outlier detection strategy.")
+        return self._strategy.detect_outliers(df)    
     def handle_outliers(self,df:pd.DataFrame, method="remove",**kwargs) -> pd.DataFrame:
         outliers = self.detect_outliers(df)
         if method == "remove":
@@ -68,7 +71,7 @@ class OutlierDetector:
             return df
 
             
-        logging.info("Outlie handling completed")
+        logging.info("Outlier handling completed")
         return df_cleaned   
     
     def visualize_outliers(self, df:pd.DataFrame,features : list) :

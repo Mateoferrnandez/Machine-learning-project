@@ -5,7 +5,7 @@ from src.outlier_detection import OutlierDetector, ZScoreOutlierDetection
 from zenml import step
 
 @step
-def outlier_detection_step(df: pd.DataFrame, column_name:str)-> pd.DataFrame:
+def outlier_detection_step(df: pd.DataFrame)-> pd.DataFrame:
         """Detects and removes outliers using OutlierDetector."""
         logging.info(f"Starting outlier detection step with DataFrame of shape: {df.shape}")
 
@@ -15,10 +15,10 @@ def outlier_detection_step(df: pd.DataFrame, column_name:str)-> pd.DataFrame:
         if not isinstance(df , pd.DataFrame):
             logging.error(f"Excpected pandas Dataframe, got {type(df)} instead.")
             raise ValueError("Input df must be a pandas DataFrame")
-        if column_name not in df.columns:
-             logging.error(f"Column '{column_name}' does not exist in the DataFrame.")
-             raise ValueError(f"Column '{column_name} does not exist in the DataFrame.")
-             # Ensure only numeric columns are passed
+        #if column_name not in df.columns:
+        #     logging.error(f"Column '{column_name}' does not exist in the DataFrame.")
+        #     raise ValueError(f"Column '{column_name} does not exist in the DataFrame.")
+         #    # Ensure only numeric columns are passed
         df_numeric = df.select_dtypes(include=[int,float])
 
         outlier_detector = OutlierDetector(ZScoreOutlierDetection(threshold=3))

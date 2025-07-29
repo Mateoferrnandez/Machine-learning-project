@@ -1,6 +1,6 @@
 import pandas as pd
 from src.feature_engineering import (
-    FeatureEngineer,
+    FeatureEnginner,
     LogTransformation,
     MinMaxScaling,
     OneHotEncoding,
@@ -18,13 +18,13 @@ def feature_engineering_step(
         features = []  # or raise an error if features are required
 
     if strategy == "log":
-        engineer = FeatureEngineer(LogTransformation(features))
+        engineer = FeatureEnginner(LogTransformation(features))
     elif strategy == "standard_scaling":
-        engineer = FeatureEngineer(StandardScaling(features))
+        engineer = FeatureEnginner(StandardScaling(features))
     elif strategy == "minmax_scaling":
-        engineer = FeatureEngineer(MinMaxScaling(features))
+        engineer = FeatureEnginner(MinMaxScaling(features))
     elif strategy == "onehot_encoding":
-        engineer = FeatureEngineer(OneHotEncoding(features))
+        engineer = FeatureEnginner(OneHotEncoding(features))
     else:
         raise ValueError(f"Unsupported feature engineering strategy: {strategy}")
 

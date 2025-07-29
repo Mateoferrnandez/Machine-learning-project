@@ -22,10 +22,10 @@ def ml_pipeline():
     filled_data = handle_missing_values_step(raw_data)
 
     # Feature Engineering Step
-    engineered_data = feature_engineering_step(filled_data,strategy="onehot_encoding",features=[['CODIGO_DEL_PRODUCTO','VENTA', 'VENTA_ZONA_101',
+    engineered_data = feature_engineering_step(filled_data,strategy="onehot_encoding",features=['CODIGO_DEL_PRODUCTO','VENTA', 'VENTA_ZONA_101',
        'VENTA_ZONA_102', 'VENTA_ZONA_103', 'VENTA_ZONA_104', 'VENTA_ZONA_107',
        'VENTA_ZONA_109', 'VENTA_ZONA_110', 'VENTA_ZONA_111', 'VENTA_ZONA_112',
-       'VENTA_ZONA_115', 'VENTA_ZONA_116', 'VENTA_ZONA_119','TALLA','NOMB_SUBGRUPO','CAMPANA']]
+       'VENTA_ZONA_115', 'VENTA_ZONA_116', 'VENTA_ZONA_119','TALLA','NOMB_SUBGRUPO','CAMPANA']
     )
 
     # Outlier Detection Step

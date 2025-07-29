@@ -61,7 +61,7 @@ class LogTransformation(FeatureEngineeringStrategy):
 # --------------------------------------
 # This strategy applies standard scaling (z-score normalization) to features, centering them around zero with unit variance.
 
-class StandardScalling(FeatureEngineeringStrategy):
+class StandardScaling(FeatureEngineeringStrategy):
     def __init__(self , features):
         """
         Initializes the StandardScaling with the specific features to scale.
@@ -72,7 +72,7 @@ class StandardScalling(FeatureEngineeringStrategy):
         self.features = features
         self.scaler = StandardScaler()
 
-    def apply_transformation(self, df: pd.DataFrame) -> pd.DateFrame:
+    def apply_transformation(self, df: pd.DataFrame) -> pd.DataFrame:
         """
         Applies standard scaling to the specified features in the DataFrame.
 
@@ -126,7 +126,7 @@ class MinMaxScaling(FeatureEngineeringStrategy):
 # Concrete Strategy for One-Hot Encoding
 # --------------------------------------
 # This strategy applies one-hot encoding to categorical features, converting them into binary vectors.
-class OneHoteEncoding(FeatureEngineeringStrategy):
+class OneHotEncoding(FeatureEngineeringStrategy):
     def __init__(self,features):
         """
         Initializes the OneHotEncoding with the specific features to encode.
@@ -135,7 +135,7 @@ class OneHoteEncoding(FeatureEngineeringStrategy):
         features (list): The list of categorical features to apply the one-hot encoding to.
         """
         self.features = features   
-        self.encoder = OneHotEncoder(Sparse=False,drop="first")
+        self.encoder = OneHotEncoder(sparse=False,drop="first")
     def apply_transformation(self, df : pd.DataFrame) -> pd.DataFrame:
         """
         Applies one-hot encoding to the specified categorical features in the DataFrame.
