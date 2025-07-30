@@ -1,5 +1,5 @@
 from steps.data_ingestion_step import data_ingestion_step
-#from steps.data_splitter_step import data_splitter_step
+from steps.data_splitter_step import data_splitter_step
 from steps.feature_engineering_step import feature_engineering_step
 from steps.handle_missing_values_step import handle_missing_values_step
 #from steps.model_building_step import model_building_step
@@ -30,6 +30,10 @@ def ml_pipeline():
 
     # Outlier Detection Step
     clean_data = outlier_detection_step(engineered_data)
+
+    # Data Splitting Step
+    X_train, X_test, y_train, y_test = data_splitter_step(clean_data, target_column="SalePrice")
+
                                         
 if __name__ == "__main__":
     # Running the pipeline
