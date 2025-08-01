@@ -1,7 +1,7 @@
 import logging
 
 import pandas as pd
-from src.outlier_detection import OutlierDetector, ZScoreOutlierDetection
+from src.outlier_detection import OutlierDetector, ZScoreOutlierDetection,IQROutlierDetection
 from zenml import step
 
 @step
@@ -21,8 +21,8 @@ def outlier_detection_step(df: pd.DataFrame)-> pd.DataFrame:
          #    # Ensure only numeric columns are passed
         df_numeric = df.select_dtypes(include=[int,float])
 
-        outlier_detector = OutlierDetector(ZScoreOutlierDetection(threshold=3))
+        outlier_detector = OutlierDetector(IQROutlierDetection())
         outliers = outlier_detector.detect_outliers(df_numeric)
-        df_cleaned = outlier_detector.handle_outliers(df_numeric, method="remove")
-
+        df_cleaned = outlier_detector.handle_outliers(df_numeric, method="")
+        logging.info(f"Finishing outlier detection step with DataFrame of shape: {df.shape}")
         return df_cleaned
