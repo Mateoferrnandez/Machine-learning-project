@@ -57,7 +57,7 @@ class SimpleTrainTestSplitStrategy(DataSplittingStrategy):
 
         X = df.drop(columns=[target_column])
         y = df[target_column]
-        logging.info(f". {X.shape}/n  {y.shape}")
+        logging.info(f"Columnas:{df.columns}")
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=self.test_size, random_state=self.random_state
         )

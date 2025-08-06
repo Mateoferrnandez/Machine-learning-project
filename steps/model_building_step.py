@@ -54,8 +54,8 @@ def model_building_step(
     # Define preprocessing for categorical and numerical features
     numerical_transformer = SimpleImputer(strategy="mean")
     categorical_transformer = Pipeline(
-        steps =[
-            ("imputer",SimpleImputer(strategy="most_frequent")),
+       steps =[
+           ("imputer",SimpleImputer(strategy="most_frequent")),
             ("onehot",OneHotEncoder(handle_unknown="ignore")),
         ]
     )

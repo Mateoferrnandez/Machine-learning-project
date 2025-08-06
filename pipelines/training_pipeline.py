@@ -3,7 +3,7 @@ from steps.data_splitter_step import data_splitter_step
 from steps.feature_engineering_step import feature_engineering_step
 from steps.handle_missing_values_step import handle_missing_values_step
 from steps.model_building_step import model_building_step
-#from steps.model_evaluator_step import model_evaluator_step
+from steps.model_evaluator_step import model_evaluator_step
 from steps.outlier_detection_step import outlier_detection_step
 from zenml import Model, pipeline, step
 
@@ -22,10 +22,7 @@ def ml_pipeline():
     filled_data = handle_missing_values_step(raw_data)
 
     # Feature Engineering Step
-    engineered_data = feature_engineering_step(filled_data,strategy="onehot_encoding",features=['CODIGO_DEL_PRODUCTO', 'VENTA_ZONA_101',
-       'VENTA_ZONA_102', 'VENTA_ZONA_103', 'VENTA_ZONA_104', 'VENTA_ZONA_107',
-       'VENTA_ZONA_109', 'VENTA_ZONA_110', 'VENTA_ZONA_111', 'VENTA_ZONA_112',
-       'VENTA_ZONA_115', 'VENTA_ZONA_116', 'VENTA_ZONA_119','TALLA','NOMB_SUBGRUPO','CAMPANA']
+    engineered_data = feature_engineering_step(filled_data,strategy="onehot_encoding",features=['TALLA','NOMB_SUBGRUPO','CAMPANA']
     )
 
     # Outlier Detection Step
@@ -34,10 +31,15 @@ def ml_pipeline():
     # Data Splitting Step
     X_train, X_test, y_train, y_test = data_splitter_step(clean_data, target_column="VENTA")
 
-
+    
     model = model_building_step(X_train=X_train, y_train=y_train)
 
+    # Model Evaluation Step
+    evaluation_metrics, mse = model_evaluator_step(
+        trained_model=model, X_test=X_test, y_test=y_test
+    )
 
+    return model
                                         
 if __name__ == "__main__":
     # Running the pipeline
