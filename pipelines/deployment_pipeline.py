@@ -7,17 +7,17 @@ from steps.prediction_service_loader import prediction_service_loader
 from steps.predictor import predictor
 from zenml import pipeline
 from zenml.integrations.mlflow.steps import mlflow_model_deployer_step
-from steps.deployer_step import deploy_model_step
+
 import mlflow.pyfunc
 requeriments_file = os.path.join(os.path.dirname(__file__),"requirements.txt")
+
 
 
 @pipeline
 def continuous_deployment_pipeline():
     trained_model = ml_pipeline()
-    # Aquí despliegas con tu step personalizado, pasándole el URI del modelo entrenado
-    deployed_service = deploy_model_step(trained_model)
-
+    
+    mlflow_model_deployer_step(workers=3, deploy_decision=True, model=trained_model)
 
 @pipeline(enable_cache=False)
 def inference_pipeline():
@@ -29,7 +29,7 @@ def inference_pipeline():
     # Load the deployed model service
     model_deployment_service = prediction_service_loader(
         pipeline_name="continuous_deployment_pipeline",
-        step_name="deployed_service",
+        step_name="mlflow_model_deployer_step",
     )
 
     # Run predictions on the batch data
