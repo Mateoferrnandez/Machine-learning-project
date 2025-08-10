@@ -147,13 +147,27 @@ class OneHotEncoding(FeatureEngineeringStrategy):
         pd.DataFrame: The dataframe with one-hot encoded features.
         """
         logging.info(f"Applying one-hot encoding to features: {self.features}")
+        logging.info(df.info())
+        logging.info(df.columns.to_list())
+        for i in self.features:
+            if i in df.columns:
+                logging.info(f"{i} esta")
+            else:
+                logging.info(f"{i}  no esta")
+
+        logging.info(df.columns.tolist())
         df_transformed = df.copy()
+        logging.info("1",df_transformed.columns.to_list())
+
         encoded_df=pd.DataFrame(
             self.encoder.fit_transform(df[self.features]),
             columns=self.encoder.get_feature_names_out(self.features),
         )
+        logging.info("2",encoded_df.columns.to_list())
         df_transformed = df_transformed.drop(columns=self.features).reset_index(drop=True)
+        logging.info("3",df_transformed.columns)
         df_transformed = pd.concat([df_transformed,encoded_df],axis=1)
+
         logging.info("One-hot encoding completed.")
         return df_transformed
 

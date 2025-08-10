@@ -7,7 +7,7 @@ from src.handle_missing_values import (
 from zenml import step
 
 
-@step
+@step(enable_cache=False)
 def handle_missing_values_step(df: pd.DataFrame, strategy: str = "mean") -> pd.DataFrame:
     """Handles missing values using MissingValueHandler and the specified strategy."""
 
@@ -20,3 +20,4 @@ def handle_missing_values_step(df: pd.DataFrame, strategy: str = "mean") -> pd.D
 
     cleaned_df = handler.handle_missing_values(df)
     return cleaned_df
+

@@ -1,8 +1,12 @@
+import logging 
 import os
 import zipfile
 from abc import ABC, abstractmethod
 
 import pandas as pd
+
+# Setup logging configuration
+#logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 #Define an abstract method class for data ingestor
 class DataIngestor(ABC):
@@ -44,10 +48,11 @@ class CsvDataIngestor(DataIngestor):
         if not file_path.endswith(".csv"):
             raise ValueError("The provided file is not a .csv file")
         #read the csv into a dataframe
-        df=pd.read_csv(file_path)
-        
+        df=pd.read_csv(file_path,sep=";")
+        #df=df.drop(columns="CANTIDADES_ESTIMADAS")
+        logging.info(f"df columns:{df.head()})")
         return df
-
+  
 
 #Implement a factory to create data ingestors
 class DataIngestorFactory:

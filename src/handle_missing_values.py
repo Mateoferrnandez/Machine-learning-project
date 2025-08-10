@@ -72,7 +72,7 @@ class FillMissingValuesStrategy(MissingValueHandlingStrategy):
         Returns:
         pd.DataFrame: The DataFrame with missing values filled.
         """
-        logging.info(f"Filling missing values using method: {self.method}")
+        logging.info(f"Filling missing values using method: {self.method} {df.info()}")
 
         df_cleaned = df.copy()
         if self.method == "mean":
@@ -85,9 +85,9 @@ class FillMissingValuesStrategy(MissingValueHandlingStrategy):
             for column in df_cleaned.columns:
                 df_cleaned[column].fillna(df[column].mode().iloc[0],inplace=True)
         else:
-            logging.warning(f"Uknown method '{self.method}. No missing values handled")     
+            logging.warning(f"Uknown method '{self.method}. No missing values handled")
 
-        logging.info("Missing values filled.")       
+        logging.info(f"Missing values filled. {df_cleaned.info()}")       
         return df_cleaned
     
 
