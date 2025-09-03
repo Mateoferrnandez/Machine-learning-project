@@ -19,12 +19,12 @@ def continuous_deployment_pipeline():
     
     mlflow_model_deployer_step(workers=3, deploy_decision=True, model=trained_model)
 
+
 @pipeline(enable_cache=False)
 def inference_pipeline():
     """Run a batch inference job with data loaded from an API."""
     # Load batch data for inference
     batch_data = dynamic_importer()
-
     
     # Load the deployed model service
     model_deployment_service = prediction_service_loader(
