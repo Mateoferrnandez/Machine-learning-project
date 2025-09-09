@@ -17,7 +17,7 @@ requeriments_file = os.path.join(os.path.dirname(__file__),"requirements.txt")
 def continuous_deployment_pipeline():
     trained_model = ml_pipeline()
     
-    mlflow_model_deployer_step(workers=3, deploy_decision=True, model=trained_model)
+    mlflow_model_deployer_step(workers=1, deploy_decision=True, model=trained_model, mlserver = True)
 
 
 @pipeline(enable_cache=False)

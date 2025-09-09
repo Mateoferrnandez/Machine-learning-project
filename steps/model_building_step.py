@@ -12,6 +12,8 @@ from sklearn.preprocessing import OneHotEncoder
 from zenml import ArtifactConfig, step
 from zenml.client import Client
 
+# 👉 Configurar MLflow para usar tu servidor en Docker
+mlflow.set_tracking_uri("http://localhost:5000")
 
 # Get the active experiment tracker from ZenML
 experimennt_tracker = Client().active_stack.experiment_tracker
