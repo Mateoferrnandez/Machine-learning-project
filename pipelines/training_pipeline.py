@@ -16,7 +16,7 @@ from zenml import Model, pipeline, step
 def ml_pipeline():
     """Define an end-to-end machine learning pipeline."""
     #Data Ingestion Step
-    raw_data = data_ingestion_step("D:\Documentos\Github\Machine-learning-project\data\Datosmodelo.csv")
+    raw_data = data_ingestion_step("/Users/mateofernandez/Documents/Github/Machine-learning-project/data/Datosmodelo.csv")
 
     #   Handling Missing Values Step
     filled_data = handle_missing_values_step(raw_data)
