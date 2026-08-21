@@ -5,6 +5,7 @@ from typing import any
 import pandas as pd
 from sklearn.base import RegressorMixin
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
@@ -62,6 +63,33 @@ class LinearRegressionStrategy(ModelBuildingStrategy):
         logging.info("Model training completed.")
         return pipeline
 
+
+
+class RandomForestStrategy(ModelBuildingStrategy):
+    def build_and_train_model(self, X_train: pd.DataFrame, y_train: pd.Series) -> Pipeline:
+        """
+        Builds and trains a Random Forest model. Tree-based models don't require
+        feature scaling, so the pipeline is simpler than the linear regression one.
+        """
+        if not isinstance(X_train, pd.DataFrame):
+            raise TypeError("X_train must be a pandas DataFrame.")
+        if not isinstance(y_train, pd.Series):
+            raise TypeError("y_train must be a pandas Series.")
+
+        logging.info("Initializing Random Forest model.")
+
+        pipeline = Pipeline(
+            [
+                ("model", RandomForestRegressor(n_estimators=300, random_state=42)),
+            ]
+        )
+        logging.info("Training Random Forest model.")
+        pipeline.fit(X_train, y_train)
+
+        logging.info("Model training completed.")
+        return pipeline
+
+
 # Context Class for Model Building
 class ModelBuilder:
     def __init__(self,strategy:ModelBuildingStrategy):
@@ -75,6 +103,8 @@ class ModelBuilder:
     def set_strategy(self, X_train: pd.DataFrame, y_train: pd.Series) -> RegressorMixin:
         """
         Executes the model building and training using the current strategy.
+        Delegates the actual training work to whichever strategy was injected.
+        This is what allows swapping model types with a single line of code change.
 
         Parameters:
         X_train (pd.DataFrame): The training data features.
