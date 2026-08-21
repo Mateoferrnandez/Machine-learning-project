@@ -171,6 +171,90 @@ class OneHotEncoding(FeatureEngineeringStrategy):
         logging.info("One-hot encoding completed.")
         return df_transformed
 
+# --- New strategy: Count Encoding, added to feature_engineering.py ---
+
+class CountEncoding(FeatureEngineeringStrategy):
+    """
+    Encodes high-cardinality categorical features (e.g. CODIGO_DEL_PRODUCTO)
+    by replacing each category with its frequency (count) in the training data.
+
+    Like TargetEncoding, this strategy must be fit only on the training set
+    and then reused (transform) on test/inference data, to avoid leaking
+    information about how often a category appears in unseen data.
+    """
+
+    def __init__(self, features):
+        """
+        Parameters:
+        features (list): categorical columns to count-encode
+                          (e.g. ['CODIGO_DEL_PRODUCTO']).
+        """
+        self.features = features
+
+        # Learned state: one frequency dictionary per feature.
+        # Populated only after fit_transform() runs on the training set.
+        self.counts_ = {}
+
+    def fit_transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Learns category frequencies from TRAINING data and applies them
+        to that same df.
+
+        Parameters:
+        df (pd.DataFrame): training dataframe.
+
+        Returns:
+        pd.DataFrame: df with categorical features replaced by their counts.
+        """
+        logging.info(f"Fitting count encoding on training data for: {self.features}")
+        df_transformed = df.copy()
+
+        for feature in self.features:
+            # value_counts() gives {category: frequency} directly.
+            freq_map = df[feature].value_counts().to_dict()
+            self.counts_[feature] = freq_map
+
+            df_transformed[feature] = df[feature].map(freq_map)
+
+        logging.info("Count encoding fit_transform completed.")
+        return df_transformed
+
+    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Applies a PREVIOUSLY LEARNED frequency mapping (from fit_transform)
+        to new data (test set or inference data). Unseen categories get a
+        fallback count of 0.
+
+        Parameters:
+        df (pd.DataFrame): dataframe to transform (test set or new data).
+
+        Returns:
+        pd.DataFrame: df with categorical features replaced by their counts.
+        """
+        if not self.counts_:
+            raise RuntimeError(
+                "CountEncoding.transform() called before fit_transform(). "
+                "Fit on training data first."
+            )
+
+        logging.info(f"Applying learned count encoding to: {self.features}")
+        df_transformed = df.copy()
+
+        for feature in self.features:
+            mapping = self.counts_[feature]
+            # Unseen products get count 0 — they've never been observed.
+            df_transformed[feature] = df[feature].map(mapping).fillna(0)
+
+        logging.info("Count encoding transform completed.")
+        return df_transformed
+
+    def apply_transformation(self, df: pd.DataFrame) -> pd.DataFrame:
+        """
+        Satisfies the abstract base class contract. Delegates to
+        fit_transform — should only be called on the TRAINING split.
+        """
+        return self.fit_transform(df)
+
 # Context Class for Feature Engineering
 # -------------------------------------
 # This class uses a FeatureEngineeringStrategy to apply transformations to a dataset.
